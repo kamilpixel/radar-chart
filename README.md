@@ -9,36 +9,20 @@ Visit the live application at: [Radar Chart Website](https://radar-chart-kamil.n
 
 ![Screenshot](https://radar-chart-kamil.netlify.app/screenshot-radar-chart.png)
 
-## Prerequisites
-
-- Node.js (Latest LTS version recommended)
-
-## Dependencies
-
-- Chart.js: ^4.5.1
-- Vite: ^7.1.7
-
-## Installation
-
-```bash
-# Install dependencies
-npm install
-```
 
 ## Development
 
 ```bash
-# Run development server
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-```
 
-## Building for Production
-
-```bash
-# Build the test
+# Build for production
 npm run build
 
-# Preview the build
+# Preview production build locally
 npm run preview
 ```
 
@@ -51,16 +35,3 @@ To change the default location, modify the `value` attribute of the hidden input
 ```
 
 Change "Kuala Lumpur" to your desired location name (based on public/data.json).
-
-## test Structure
-
-```
-radar-chart/
-├── public/
-│   └── data.json
-├── src/
-│   ├── main.js
-│   └── style.css
-├── index.html
-└── package.json
-```
