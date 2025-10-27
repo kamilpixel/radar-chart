@@ -2,50 +2,74 @@ import "./style.css";
 import Chart from "chart.js/auto";
 const ctx = document.getElementById("myChart");
 
-const theData = {
-  labels: [
-    "Eating",
-    "Drinking",
-    "Sleeping",
-    "Designing",
-    "Coding",
-    "Cycling",
-    "Running",
-  ],
-  datasets: [
-    {
-      label: "My First Dataset",
-      data: [65, 59, 90, 81, 56, 55, 40],
-      fill: true,
-      backgroundColor: "rgba(255, 99, 132, 0.2)",
-      borderColor: "rgb(255, 99, 132)",
-      pointBackgroundColor: "rgb(255, 99, 132)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgb(255, 99, 132)",
-    },
-    {
-      label: "My Second Dataset",
-      data: [28, 48, 40, 19, 96, 27, 100],
-      fill: true,
-      backgroundColor: "rgba(54, 162, 235, 0.2)",
-      borderColor: "rgb(54, 162, 235)",
-      pointBackgroundColor: "rgb(54, 162, 235)",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "rgb(54, 162, 235)",
-    },
-  ],
-};
-
 if (ctx) {
+  let cleanData;
+
+  // Modify data to fit chartjs data format
+  const populateData = (data) => {
+    const indexNumber = 1;
+
+    return {
+      locationLabel: `${data.chartData[indexNumber].region} / ${data.chartData[indexNumber].city_name}`,
+      chartData: {
+        labels: data.chartConfig[0].labels,
+        datasets: [
+          {
+            label: "Global Data",
+            data: data.chartData[indexNumber].global_data,
+          },
+          {
+            label: "Region Data",
+            data: data.chartData[indexNumber].region_data,
+          },
+          {
+            label: "City Data",
+            data: data.chartData[indexNumber].city_data,
+          },
+        ],
+      },
+    };
+  };
+
+  // Fetch data from sample json file
+  const fetchData = async () => {
+    try {
+      let response = await fetch("/data.json");
+      response = await response.json();
+      cleanData = populateData(response);
+      const elLocationLabel = document.getElementById("location-label");
+      if (elLocationLabel) {
+        elLocationLabel.textContent = cleanData.locationLabel;
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  await fetchData();
+
+  // Initialize radar chart
   new Chart(ctx, {
     type: "radar",
-    data: theData,
+    data: cleanData.chartData,
     options: {
+      responsive: true,
+      maintainAspectRatio: true,
       elements: {
         line: {
-          borderWidth: 3,
+          borderWidth: 1,
+        },
+      },
+      scales: {
+        r: {
+          pointLabels: {
+            font: {
+              size: 14,
+            },
+          },
+          ticks: {
+            beginAtZero: true,
+            stepSize: 20,
+          },
         },
       },
     },
